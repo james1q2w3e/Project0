@@ -1,7 +1,0 @@
-
-W
-java:S1118	":Add a private constructor to hide the implicit public one.(ς°ª8Φ±γν1
-O
-java:S4925"-Remove this "Class.forName()", it is useless.(ά†Η“ωÿÿÿÿ8Χ±γν1
-X
-java:S6437!"6Revoke and change this password, as it is compromised.(”Κβÿÿÿÿÿ8Ψ±γν1
