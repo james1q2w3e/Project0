@@ -9,11 +9,17 @@ import java.util.ArrayList;
 //This is a great way to document what functionalities exist in the AccountDAO
 public interface AccountDAOInterface {
 
+    ArrayList<Account> getAllAccounts();
     //a method that SELECTS an Account by its ID
     Account getAccountById(int id);
 
-    //a method that UPDATEs an Account's salary
-    boolean updateAccountTotal(int total, String title);
+    //a method that UPDATEs an Account
+    Account updateAccount(Account account);
 
-    ArrayList<Account> getAllAccounts();
+    Account insertAccount(Account account);
+
+    /*TODO: set the SQL table to set account_id_fk to null in the case
+            that the account associated is deleted    */
+    void deleteAccount(int account_id);
+
 }

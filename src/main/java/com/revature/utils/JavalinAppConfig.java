@@ -2,11 +2,13 @@ package com.revature.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.revature.controllers.AccountController;
 import com.revature.controllers.UserController;
-import com.revature.models.User;
 import io.javalin.Javalin;
 import io.javalin.json.JsonMapper;
 import jakarta.validation.constraints.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
 
@@ -27,7 +29,14 @@ public class JavalinAppConfig {
         }
     };
 
+    private static final Logger logger = LoggerFactory.getLogger(JavalinAppConfig.class);
+
     private Javalin app = Javalin.create(config -> config.jsonMapper(gsonMapper))
+
+            .before(ctx -> {
+                //this logic will run before all requests to the server
+                logger.info(ctx.method() + " request was called to: " + ctx.fullUrl());
+            })
             //routes will declare all our possible paths
             .routes(() -> {
                 //each path will allow us to group like-methods
@@ -42,10 +51,18 @@ public class JavalinAppConfig {
                         get(UserController::handleGetById);
                     });
                 });
+                path("accounts", () -> {
+                    get(AccountController::handleGetAll);
+                    post(AccountController::handleCreate);
+                    put(AccountController::handleUpdate);
+                    delete(AccountController::handleDelete);
+                    //accounts/{id}
+                    path("{id}", () -> {
+                        get(AccountController::handleGetById);
+                    });
+                });
             });
 
-//    app.get("/users", UserController::handleGetAll);
-//    app.get("/users/{id}", UserController::handleGetById);
 
     public void start(int port) {
         app.start(port);

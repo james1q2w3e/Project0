@@ -27,8 +27,6 @@ public class Launcher {
 
         JavalinAppConfig app = new JavalinAppConfig();
         app.start(8080);
-//        app.get("/users", UserController::handleGetAll);
-//        app.get("/users/{id}", UserController::handleGetById);
 
 
 

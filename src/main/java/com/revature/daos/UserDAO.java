@@ -90,7 +90,7 @@ public class UserDAO implements UserDAOInterface {
 
             AccountDAO accountDAO = new AccountDAO();
 
-            while(resultSet.next()) {
+            if(resultSet.next()) {
                 int userId = resultSet.getInt("user_id");
                 String firstName = resultSet.getString("first_name");
                 String lastName = resultSet.getString("last_name");
@@ -141,7 +141,7 @@ public class UserDAO implements UserDAOInterface {
     public User updateUser(User user) {
 
         try(Connection conn = ConnectionUtil.getConnection()) {
-            String sql = "UPDATE users SET first_name=?, last_name=?, account_id=? WHERE user_id=?";
+            String sql = "UPDATE users SET first_name=?, last_name=?, account_id_fk=? WHERE user_id=?";
 
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, user.getFirst_name());
@@ -149,6 +149,8 @@ public class UserDAO implements UserDAOInterface {
             ps.setInt(3, user.getAccount_id_fk());
             ps.setInt(4, user.getUser_id());
             ps.executeUpdate();
+
+            return user;
 
         } catch (SQLException e) {
             System.out.println("Oh no! Error updating user >>> ");

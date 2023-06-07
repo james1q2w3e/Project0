@@ -14,52 +14,6 @@ import java.util.ArrayList;
 //This Class will access/query the accounts table in the DB.
 public class AccountDAO implements AccountDAOInterface {
 
-
-    @Override
-    public Account getAccountById(int id) {
-
-        //use a try-with-resources to open the connection to the DB.
-        try(Connection conn = ConnectionUtil.getConnection()) {
-
-            //We need a String that hold the SQL command we want to run on the DB.
-            //This string has a wildcard/parameter/variable for the account_id (the ?)
-            //we have to take the user-inputted account id and put it into this wildcard
-            String sql = "SELECT * FROM accounts WHERE account_id=?";
-
-            //We need a PreparedStatement object to fill the wildcard in. (the ?)
-            PreparedStatement ps = conn.prepareStatement(sql);
-
-            //insert a value for the ? wildcard.
-            //This is saying "The first wildcard will get filled by the id variable."
-            ps.setInt(1,id);
-
-            //Here, we are executing the fully-prepared SQL command that was stored in the PreparedStatement.
-            //The results of the query will be stored in a ResultSet object.
-            ResultSet rs = ps.executeQuery();
-
-            //Extracting the Account data from the result set.
-            //We need to use the all-args constructor to store all the data.
-            //To get data, we use the rs.get<??>() method
-
-            if(rs.next()) {
-                Account account = new Account(
-                        rs.getInt("account_id"),
-                        rs.getString("account_name"),
-                        rs.getInt("account_total")
-                );
-
-                return account;
-            }
-
-        } catch(SQLException e) {
-            System.out.println("Uh oh! Error getting account! >>> ");
-            e.printStackTrace();
-        }
-
-        //If something goes wrong, return NULL
-        return null;
-    }
-
     public ArrayList<Account> getAllAccounts() {
         ArrayList<Account> accounts = new ArrayList<>();
 
@@ -86,27 +40,102 @@ public class AccountDAO implements AccountDAOInterface {
         return new ArrayList<>();
     }
 
+
     @Override
-    public boolean updateAccountTotal(int total, String name) {
+    public Account getAccountById(int id) {
+
+        //use a try-with-resources to open the connection to the DB.
+        try(Connection conn = ConnectionUtil.getConnection()) {
+
+            String sql = "SELECT * FROM accounts WHERE account_id=?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1,id);
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()) {
+                Account account = new Account(
+                        rs.getInt("account_id"),
+                        rs.getString("account_name"),
+                        rs.getInt("account_total")
+                );
+
+                return account;
+            }
+
+        } catch(SQLException e) {
+            System.out.println("Uh oh! Error getting account! >>> ");
+            e.printStackTrace();
+        }
+
+        //If something goes wrong, return NULL
+        return null;
+    }
+
+    @Override
+    public Account updateAccount(Account account) {
 
         try(Connection conn = ConnectionUtil.getConnection()) {
 
-            String sql = "UPDATE accounts SET account_total = ? WHERE account_name = ?";
+            String sql = "UPDATE accounts SET account_total = ?, account_name=? WHERE account_id = ?";
 
             PreparedStatement ps = conn.prepareStatement(sql);
 
-            ps.setInt(1, total);
-            ps.setString(2, name);
+            ps.setInt(1, account.getAccount_total());
+            ps.setString(2, account.getAccount_name());
+            ps.setInt(3, account.getAccount_id());
             //USES executeUPDATE!!
             ps.executeUpdate();
 
-            return true;
+            return account;
 
         } catch (SQLException e) {
             System.out.println("Uh oh! Failed to update! >>> ");
             e.printStackTrace();
         }
 
-        return false;
+        return null;
+    }
+
+    @Override
+    public Account insertAccount(Account account) {
+        try(Connection conn = ConnectionUtil.getConnection()) {
+
+            String sql = "INSERT INTO accounts(account_name, account_total)" +
+                    "VALUES (?, ?)";
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setString(1, account.getAccount_name());
+            ps.setInt(2, account.getAccount_total());
+            //USES executeUPDATE!!
+            ps.executeUpdate();
+
+            return account;
+
+        } catch (SQLException e) {
+            System.out.println("Uh oh! Failed to update! >>> ");
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Override
+    public void deleteAccount(int id) {
+
+        try(Connection conn = ConnectionUtil.getConnection()) {
+
+            String sql = "DELETE FROM accounts WHERE account_id=?";
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+
+            System.out.println("Delete Successful!");
+
+        } catch (SQLException e) {
+            System.out.println("Oh no! Error deleting account >>> ");
+            e.printStackTrace();
+        }
     }
 }
