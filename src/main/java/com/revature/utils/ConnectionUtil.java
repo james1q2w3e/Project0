@@ -27,7 +27,7 @@ public class ConnectionUtil {
 
         Dotenv dotenv = Dotenv.configure()
                 .directory("C:\\Users\\James\\Desktop\\Revature\\demo\\Project0\\assets")
-                .filename("env") // instead of '.env', use 'env'
+                .filename(".env") // instead of '..env', use '.env'
                 .load();
 
         //I'm going to put the credentials in Strings, and use those strings in a method that gets connections
