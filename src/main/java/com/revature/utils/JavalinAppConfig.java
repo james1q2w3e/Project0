@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.revature.controllers.AccountController;
 import com.revature.controllers.UserController;
+import com.revature.models.User;
 import io.javalin.Javalin;
 import io.javalin.json.JsonMapper;
 import jakarta.validation.constraints.NotNull;
@@ -31,7 +32,14 @@ public class JavalinAppConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(JavalinAppConfig.class);
 
-    private Javalin app = Javalin.create(config -> config.jsonMapper(gsonMapper))
+    private Javalin app = Javalin.create(config -> {
+        config.jsonMapper(gsonMapper);
+        config.plugins.enableCors(cors -> {
+            cors.add(it -> {
+                it.allowHost("http://localhost:3000" /*, "" */);
+            });
+        });
+    })
 
             .before(ctx -> {
                 //this logic will run before all requests to the server
@@ -40,6 +48,9 @@ public class JavalinAppConfig {
             //routes will declare all our possible paths
             .routes(() -> {
                 //each path will allow us to group like-methods
+                path("/", () -> {
+                    get(UserController::handleGetAll);
+                });
                 path("users", () -> {
                    //declare routes and methods
                     get(UserController::handleGetAll);
