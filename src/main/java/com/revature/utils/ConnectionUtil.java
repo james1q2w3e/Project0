@@ -1,5 +1,7 @@
 package com.revature.utils;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -23,10 +25,15 @@ public class ConnectionUtil {
         //Use our database credentials to establish a database connection
         //Hardcoded for now - It's posible hide them in the Environment Variables, feel free to look into it
 
+        Dotenv dotenv = Dotenv.configure()
+                .directory("C:\\Users\\James\\Desktop\\Revature\\demo\\Project0\\assets")
+                .filename("env") // instead of '.env', use 'env'
+                .load();
+
         //I'm going to put the credentials in Strings, and use those strings in a method that gets connections
-        String url = "jdbc:postgresql://localhost:5432/postgres?currentSchema=project0";
-        String username = "postgres";
-        String password = "password";
+        String url = dotenv.get("DB_URL");
+        String username = dotenv.get("DB_USERNAME");
+        String password = dotenv.get("DB_PASSWORD");
 
         //This return statement is what returns out actual database Connection object
         //Note how this getConnection() method has a return type of Connection
