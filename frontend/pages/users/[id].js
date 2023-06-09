@@ -126,12 +126,13 @@ export default function SingleUser ({ user }) {
   )
 }
 
-SingleUser.getInitialProps = async ({ query }) => {
+export const getServerSideProps = async ({ query }) => {
   const id = query.id; // Assuming the parameter in the URL is named "id"
   const res = await fetch(`http://localhost:8080/users/${id}`);
   const json = await res.json();
   console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA", query.id);
-  return {
-    user: json
+  return { props: {
+      user: json
+    }
   };
 };

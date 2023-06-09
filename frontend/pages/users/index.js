@@ -28,6 +28,7 @@ export default function User ({ users }) {
 
       if(response.ok) {
         console.log('User deleted successfully!');
+        //To ensure we get the updated data, and it re-renders the content
         const newUsersResponse = await fetch('http://localhost:8080/users');
         const newUsers = await newUsersResponse.json();
         console.log("newUsers >>> ", newUsers);
@@ -58,7 +59,6 @@ export default function User ({ users }) {
         <tr>
           <th>First Name</th>
           <th>Last Name</th>
-          <th>Role ID</th>
           <th>Account ID</th>
           <th>Account Name</th>
           <th>Account Total</th>
@@ -75,7 +75,7 @@ export default function User ({ users }) {
             <td>
             <Link href={`/users/${user.user_id}`}>{user.last_name}</Link>
             </td>
-            <td>{user.role_id_fk}</td>
+            {/* <td>{user.role_id_fk}</td> */}
             <td>{user.account?.account_id}</td>
             <td>{user.account?.account_name}</td>
             <td>{user.account?.account_total}</td>

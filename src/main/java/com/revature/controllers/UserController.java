@@ -34,6 +34,7 @@ public class UserController {
                 ctx.status(200);
                 ctx.json(user);
             } else {
+                logger.warn("Oops! No user found!");
                 ctx.status(404);
             }
         } catch (NumberFormatException e) {
@@ -80,15 +81,12 @@ public class UserController {
     }
 
     public static void handleDelete(Context ctx) {
-//        int id;
+//
         try{
-//            id = Integer.parseInt(ctx.pathParam("id"));
-            System.out.println("AAAAAAAAAAAAAAAAAAAA"+ctx.body());
+            logger.info("Attempting to <parseInt> the ctx.body()");
             int id = Integer.parseInt(ctx.body());
             System.out.println("ID >>>>"+id);
             userService.deleteUser(id);
-//            User user = ctx.bodyAsClass(User.class);
-//            userService.deleteUser(user.getUser_id());
             ctx.status(200);
         } catch (NumberFormatException e) {
             logger.error(e.getMessage());

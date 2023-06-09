@@ -52,6 +52,7 @@ public class AccountController {
             Account result = accountService.insertAccount(account);
 
             if(result != null) {
+                logger.info("Success creating an account! :D "+result);
                 ctx.status(201);
                 ctx.json(result);
             } else {
@@ -82,15 +83,12 @@ public class AccountController {
     }
 
     public static void handleDelete(Context ctx) {
-//        int id;
+//
         try{
-//            id = Integer.parseInt(ctx.pathParam("id"));
-//            accountService.deleteAccount(id);
-
-            Account account = ctx.bodyAsClass(Account.class);
-            accountService.deleteAccount(account.getAccount_id());
+            int id = Integer.parseInt(ctx.body());
+            logger.info("Attempting to <parseInt> the ctx.body()");
+            accountService.deleteAccount(id);
             ctx.status(200);
-
         } catch (NumberFormatException e) {
             logger.error(e.getMessage());
             ctx.status(400);
