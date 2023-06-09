@@ -3,7 +3,7 @@
 // import styles from '../../styles/Home.module.css';
 import React, { useState } from 'react';
 
-
+//TODO: fix this monstrosity
 const initialState = {
   first_name: '',
   last_name: '',

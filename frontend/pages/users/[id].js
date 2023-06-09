@@ -120,6 +120,7 @@ export default function SingleUser ({ user }) {
           </tr>
       </tbody>
     </table>
+    
 
     </div>
   )

@@ -83,8 +83,12 @@ public class UserController {
 //        int id;
         try{
 //            id = Integer.parseInt(ctx.pathParam("id"));
-            User user = ctx.bodyAsClass(User.class);
-            userService.deleteUser(user.getUser_id());
+            System.out.println("AAAAAAAAAAAAAAAAAAAA"+ctx.body());
+            int id = Integer.parseInt(ctx.body());
+            System.out.println("ID >>>>"+id);
+            userService.deleteUser(id);
+//            User user = ctx.bodyAsClass(User.class);
+//            userService.deleteUser(user.getUser_id());
             ctx.status(200);
         } catch (NumberFormatException e) {
             logger.error(e.getMessage());
